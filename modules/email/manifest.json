@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "id": "email",
+  "kind": "module",
+  "version": "0.1.10",
+  "icon": "ui/icon.svg",
+  "name": "Email",
+  "description": "Compose emails, save reusable templates and send explicitly approved messages through Resend.",
+  "module_service_gateway": 1,
+  "modules": [
+    {
+      "id": "audience",
+      "required": false,
+      "actions": [
+        "contacts"
+      ]
+    }
+  ],
+  "source": {
+    "type": "legacy-extraction",
+    "core_path": "src/routes/[[portal_id]]/modules/(premium)/email"
+  },
+  "integrations": [
+    {
+      "id": "io.extaas.resend",
+      "required": true,
+      "actions": [
+        "send-email",
+        "send-private-batch",
+        "read-received-email"
+      ]
+    },
+    {
+      "id": "io.extaas.supabase",
+      "required": false
+    }
+  ],
+  "environment": [],
+  "ui": {
+    "document": "ui/dist/index.html",
+    "enabled": true,
+    "navigation": {
+      "path": "modules/email",
+      "label": "email"
+    },
+    "landing": false
+  },
+  "runtime": {
+    "type": "none"
+  },
+  "cron": [],
+  "migrations": {
+    "path": "migrations",
+    "transactional": true
+  },
+  "permissions": {
+    "network": "integration-only",
+    "storage": "module-volume"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "@extaas/module-audience",
+  "private": true,
+  "version": "0.1.9",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js"
+  }
+}

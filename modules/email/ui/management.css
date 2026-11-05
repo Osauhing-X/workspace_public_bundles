@@ -1,0 +1,22 @@
+/* Scoped to this package iframe; never changes Workspace chrome. */
+#module > main {
+  box-sizing:border-box;width:min(100%,1440px);margin:0 auto;
+  padding:clamp(16px,2.4vw,32px);min-width:0;
+}
+#module main button,#module main .button,
+#module main input:not([type=checkbox]):not([type=radio]):not([type=hidden]):not([type=color]),
+#module main select {min-height:44px}
+#module main :is(input,select,textarea) {box-sizing:border-box;min-width:0;max-width:100%}
+#module main :is(button,input,select,textarea,a):focus-visible {outline:2px solid #866000;outline-offset:3px}
+#module main button:disabled {cursor:not-allowed}
+#module main .recipient-list label {align-items:center;min-height:44px;box-sizing:border-box}
+#module main .recipient-list input[type=checkbox],#module main .bulk-permission input[type=checkbox] {
+  flex:none;width:18px;height:18px;min-height:18px;margin:0;
+}
+#module main nav,#module main article {flex-wrap:wrap}
+#module main .email-confirmation header button {min-width:44px;min-height:44px}
+@media(max-width:600px) {
+  #module main .email-confirmation footer {align-items:stretch}
+  #module main .email-confirmation footer button {flex:1}
+  #module main article strong {overflow-wrap:anywhere;min-width:0}
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "id": "audience",
+  "kind": "module",
+  "version": "0.1.9",
+  "api":[{"id":"contacts","mode":"read","entry":"api/contacts.js","export":"contacts","provider_reads":[{"id":"resend","integration":"io.extaas.resend","action":"contact-overview"},{"id":"stripe","integration":"io.extaas.stripe","action":"customer-contacts"},{"id":"supabase","integration":"io.extaas.supabase","action":"auth-contacts"}]}],
+  "icon": "ui/icon.svg",
+  "name": "Communication",
+  "description": "View configured Resend, Stripe and Supabase Auth contacts, combine matching emails and manage Resend subscriptions.",
+  "module_service_gateway": 1,
+  "source": {
+    "type": "legacy-extraction",
+    "core_path": "src/routes/[[portal_id]]/modules/(premium)/audience"
+  },
+  "integrations": [
+    {
+      "id": "io.extaas.resend",
+      "required": false,
+      "actions": ["list-contacts", "contact-overview", "add-contact", "update-contact", "remove-contact"]
+    },
+    {
+      "id": "io.extaas.supabase",
+      "required": false,
+      "actions": ["auth-contacts"]
+    },
+    {
+      "id":"io.extaas.stripe",
+      "required":false,
+      "actions":["customer-contacts"]
+    }
+  ],
+  "environment": [],
+  "applications": [{ "id": "website", "required": false }],
+  "application_imports": [{ "application": "website", "code": "audience", "token": "[import:audience]", "renderer": { "entry": "server/public.js", "export": "render" } }],
+  "ui": {
+    "document": "ui/dist/index.html",
+    "enabled": true,
+    "navigation": {
+      "path": "modules/audience",
+      "label": "audience"
+    },
+    "landing": true
+  },
+  "runtime": {
+    "type": "node",
+    "command": "node server/index.js",
+    "healthcheck": "/health"
+  },
+  "cron": [],
+  "migrations": {
+    "path": "migrations",
+    "transactional": true
+  },
+  "permissions": {
+    "network": "integration-only",
+    "storage": "module-volume"
+  }
+}

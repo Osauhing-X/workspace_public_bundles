@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "id": "discord",
+  "kind": "module",
+  "version": "0.1.3",
+  "module_service_gateway": 1,
+  "icon": "ui/icon.svg",
+  "name": "Discord",
+  "description": "Manage assigned Discord conversations and messages; publish only explicitly selected updates on Website.",
+  "source": {
+    "type": "legacy-extraction",
+    "core_path": "src/routes/[[portal_id]]/modules/(premium)/discord"
+  },
+  "integrations": [
+    {
+      "id": "io.extaas.discord",
+      "required": false,
+      "actions": ["list-rooms", "list-messages", "create-room", "send-message", "compose-message", "edit-message", "delete-message"]
+    }
+  ],
+  "environment": [],
+  "applications": [{ "id": "website", "required": false }],
+  "application_imports": [{ "application": "website", "code": "discord", "token": "[import:discord]", "renderer": { "entry": "server/public.js", "export": "render" } }],
+  "ui": {
+    "document": "ui/index.html",
+    "data": { "entry": "server/data.js", "export": "manage", "public_export": "publicData" },
+    "provider_actions": [
+      { "id": "refresh-rooms", "integration_id": "io.extaas.discord", "action": "list-rooms" },
+      { "id": "read-messages", "integration_id": "io.extaas.discord", "action": "list-messages" },
+      { "id": "create-room", "integration_id": "io.extaas.discord", "action": "create-room" },
+      { "id": "send-message", "integration_id": "io.extaas.discord", "action": "send-message" },
+      { "id": "compose-message", "integration_id": "io.extaas.discord", "action": "compose-message" },
+      { "id": "edit-message", "integration_id": "io.extaas.discord", "action": "edit-message" },
+      { "id": "delete-message", "integration_id": "io.extaas.discord", "action": "delete-message" }
+    ],
+    "enabled": true,
+    "navigation": {
+      "path": "modules/discord",
+      "label": "discord"
+    },
+    "landing": true
+  },
+  "runtime": {
+    "type": "none"
+  },
+  "cron": [],
+  "migrations": {
+    "path": "migrations",
+    "transactional": true
+  },
+  "permissions": {
+    "network": "integration-only",
+    "storage": "module-volume"
+  }
+}
