@@ -4,7 +4,7 @@ const message = value => ({ id: clean(value.id, 22), channel_id: clean(value.cha
 function boundCache(state){
  while(Buffer.byteLength(JSON.stringify(state.messages),'utf8')>192*1024){const id=Object.keys(state.messages)[0];if(!id)break;if(state.messages[id].length)state.messages[id].shift();else delete state.messages[id];}
 }
-const stateOf = value => ({ channel: value?.channel ?? null, rooms: Array.isArray(value?.rooms) ? value.rooms : [], messages: value?.messages && typeof value.messages === 'object' && !Array.isArray(value.messages) ? value.messages : {}, publication: value?.publication ?? null });
+const stateOf = value => ({ channel: value?.channel ?? null, rooms: Array.isArray(value?.rooms) ? value.rooms : [], messages: value?.messages && typeof value.messages === 'object' && !Array.isArray(value.messages) ? value.messages : {} });
 
 export function manage({ payload }) {
   const state = stateOf(payload.state);
@@ -24,21 +24,6 @@ export function manage({ payload }) {
       state.messages = Object.fromEntries(Object.entries(state.messages).slice(-5));
       boundCache(state);
     } else throw new Error('Unknown Discord provider result.');
-  } else if (payload.body.action === 'publish') {
-    if (payload.body.confirm_public !== true) throw new Error('Confirm that these messages may be published on Website.');
-    const selected = state.rooms.find(value => value.id === payload.body.room_id);
-    if (!selected) throw new Error('Refresh and choose a conversation first.');
-    const ids = payload.body.message_ids;
-    if (!Array.isArray(ids) || !ids.length || ids.length > 20 || ids.some(id => typeof id !== 'string')) throw new Error('Select between 1 and 20 messages to publish.');
-    const messages = (state.messages[selected.id] ?? []).filter(value => ids.includes(value.id));
-    if (messages.length !== new Set(ids).size) throw new Error('A selected message no longer exists. Refresh before publishing.');
-    if(messages.some(value=>!value.content?.trim()))throw Error('The text-only Website snapshot cannot publish embed-only messages.');
-    state.publication = { title: selected.name, messages: messages.map(value => ({ content: value.content, timestamp: value.timestamp })), published_at: new Date().toISOString() };
-  } else if (payload.body.action === 'unpublish') state.publication = null;
-  else throw new Error('Unknown Discord operation.');
+  } else throw new Error('Unknown Discord operation.');
   return { state, result: state };
-}
-export function publicData({ payload }) {
-  const publication = stateOf(payload.state).publication;
-  return { instance_id: payload.instance_id, publication: publication ? { title: clean(publication.title, 100), published_at: publication.published_at, messages: publication.messages.slice(0, 20).map(value => ({ content: clean(value.content), timestamp: clean(value.timestamp, 40) })) } : null };
 }
