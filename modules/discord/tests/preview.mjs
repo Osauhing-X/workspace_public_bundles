@@ -2,7 +2,7 @@
 import {createServer} from 'node:http';
 import {readFileSync} from 'node:fs';
 import {pathToFileURL} from 'node:url';
-import * as provider from '../../../integrations/discord/server/actions.js';
+const provider = await import(process.env.WORKSPACE_DISCORD_TEST_PROVIDER ? pathToFileURL(process.env.WORKSPACE_DISCORD_TEST_PROVIDER).href : new URL('../../../integrations/discord/server/actions.js', import.meta.url).href);
 import {manage} from '../server/data.js';
 const guild='111111111111111111',channel='222222222222222222',thread='333333333333333333',bot='888888888888888888';
 export async function createDiscordPreview(){
