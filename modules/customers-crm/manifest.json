@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "id": "customers-crm",
+  "kind": "module",
+  "version": "0.1.5",
+  "icon": "ui/icon.svg",
+  "name": "Customers Crm",
+  "description": "Private instance-owned customers, companies, relationships and follow-up activities with archive and restore.",
+  "source": {
+    "type": "legacy-extraction",
+    "core_path": "src/routes/[[portal_id]]/modules/(basic)/customers-crm"
+  },
+  "integrations": [
+    {
+      "id": "io.extaas.supabase",
+      "required": false
+    }
+  ],
+  "environment": [],
+  "ui": {
+    "document": "ui/dist/index.html",
+    "data": { "entry": "server/data.js", "export": "manage" },
+    "enabled": true,
+    "navigation": {
+      "path": "modules/customers-crm",
+      "label": "customers-crm"
+    },
+    "landing": true
+  },
+  "runtime": {
+    "type": "none"
+  },
+  "cron": [],
+  "migrations": {
+    "path": "migrations",
+    "transactional": true
+  },
+  "permissions": {
+    "network": "integration-only",
+    "storage": "module-volume"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "id": "admin",
+  "kind": "module",
+  "version": "0.1.6",
+  "icon": "ui/icon.svg",
+  "name": "Admin",
+  "description": "Private project and task workspace with linked records, deadlines, search and recoverable archives.",
+  "source": {
+    "type": "legacy-extraction",
+    "core_path": "src/routes/[[portal_id]]/modules/(admin)/admin"
+  },
+  "integrations": [
+    {
+      "id": "io.extaas.supabase",
+      "required": false
+    }
+  ],
+  "environment": [],
+  "ui": {
+    "document": "ui/index.html",
+    "data": { "entry": "server/data.js", "export": "manage" },
+    "enabled": true,
+    "navigation": {
+      "path": "modules/admin",
+      "label": "admin"
+    },
+    "landing": true
+  },
+  "runtime": {
+    "type": "none"
+  },
+  "cron": [],
+  "migrations": {
+    "path": "migrations",
+    "transactional": true
+  },
+  "permissions": {
+    "network": "integration-only",
+    "storage": "module-volume"
+  }
+}

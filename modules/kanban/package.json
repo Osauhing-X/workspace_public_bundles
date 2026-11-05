@@ -1,0 +1,9 @@
+{
+  "name": "@extaas/module-kanban",
+  "private": true,
+  "version": "0.1.8",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js"
+  }
+}

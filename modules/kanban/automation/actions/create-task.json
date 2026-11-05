@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "id": "create-task",
+  "name": "Create a task in a column",
+  "description": "Add a task to a chosen column in this Kanban module. Use earlier request values in its title and description.",
+  "storage": "kanban",
+  "mutates": true,
+  "fields": [
+    {
+      "id": "board_set",
+      "label": "Board set ID",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "column",
+      "label": "Column ID",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "title",
+      "label": "Task title",
+      "type": "text",
+      "required": true
+    },
+    {
+      "id": "description",
+      "label": "Task description",
+      "type": "text",
+      "required": false
+    }
+  ],
+  "outputs": [
+    {
+      "id": "task_id",
+      "label": "Created task ID",
+      "type": "string"
+    }
+  ],
+  "handler": {
+    "entry": "automation/handlers/tasks.js",
+    "export": "createTask"
+  }
+}

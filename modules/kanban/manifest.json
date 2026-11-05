@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "id": "kanban",
+  "kind": "module",
+  "version": "0.1.8",
+  "icon": "ui/icon.svg",
+  "name": "Kanban",
+  "description": "Manage board sets, columns, tasks, assignments and completion in an instance-owned workspace.",
+  "source": {
+    "type": "legacy-extraction",
+    "core_path": "src/routes/[[portal_id]]/modules/(basic)/kanban"
+  },
+  "integrations": [
+    {
+      "id": "io.extaas.supabase",
+      "required": false
+    }
+  ],
+  "environment": [],
+  "ui": {
+    "document": "ui/dist/index.html",
+    "enabled": true,
+    "navigation": {
+      "path": "modules/kanban",
+      "label": "kanban"
+    },
+    "landing": false
+  },
+  "runtime": {
+    "type": "node",
+    "command": "node server/index.js",
+    "healthcheck": "/health"
+  },
+  "cron": [],
+  "migrations": {
+    "path": "migrations",
+    "transactional": true
+  },
+  "permissions": {
+    "network": "integration-only",
+    "storage": "module-volume"
+  }
+}

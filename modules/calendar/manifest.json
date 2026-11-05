@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "id": "calendar",
+  "kind": "module",
+  "version": "0.1.11",
+  "icon": "ui/icon.svg",
+  "name": "Calendar",
+  "description": "Manage instance-owned reminders in the original month and day calendar views.",
+  "source": {
+    "type": "legacy-extraction",
+    "core_path": "src/routes/[[portal_id]]/modules/(basic)/calendar"
+  },
+  "integrations": [
+    {
+      "id": "io.extaas.supabase",
+      "required": false
+    }
+  ],
+  "environment": [],
+  "ui": {
+    "document": "ui/dist/index.html",
+    "enabled": true,
+    "navigation": {
+      "path": "modules/calendar",
+      "label": "calendar"
+    },
+    "landing": true
+  },
+  "runtime": {
+    "type": "node",
+    "command": "node server/index.js",
+    "healthcheck": "/health"
+  },
+  "cron": [],
+  "migrations": {
+    "path": "migrations",
+    "transactional": true
+  },
+  "permissions": {
+    "network": "integration-only",
+    "storage": "module-volume"
+  }
+}
