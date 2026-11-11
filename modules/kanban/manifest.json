@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "kanban",
   "kind": "module",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "icon": "ui/icon.svg",
   "name": "Kanban",
   "description": "Manage board sets, columns, tasks, assignments and completion in an instance-owned workspace.",
@@ -39,5 +39,18 @@
   "permissions": {
     "network": "integration-only",
     "storage": "module-volume"
+  },
+  "member_ui": {
+    "document": "ui/dist/member.html",
+    "data": {
+      "entry": "server/member.mjs",
+      "export": "member"
+    },
+    "actions": [
+      "read",
+      "setup",
+      "settings"
+    ],
+    "storage": "kanban-settings"
   }
 }

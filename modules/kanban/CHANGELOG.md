@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.0 — 2026-11-11
+
+- Add a group-scoped Dashboard editor backed by the existing instance Kanban data.
+- Retain all board sets, assignments, notes and completed tasks.
+- Reject stale Dashboard saves after edits in Core or another Dashboard.
+- Keep provider keys and Core management outside the member view.
+
 ## 0.1.8 — 2026-10-27
 
 - Add a create-task automation action for a selected existing board and column.
