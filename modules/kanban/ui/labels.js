@@ -3,6 +3,7 @@ export const labels = {
   "moveColumnLeft": "Move column left",
   "moveColumnRight": "Move column right",
   "columnMoved": "Column order saved.",
+  "cardTextLimit": "Keep the title within 160 characters and each description or note within 2,000. Split a longer plan between cards; your draft is preserved.",
   "boardSet": "Board Set",
   "name": "Name",
   "boardSetDescription": "Board Set Description",

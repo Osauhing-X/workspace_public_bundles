@@ -7,6 +7,7 @@
 - Disable ordering at column boundaries and while another draft or save is active.
 - Let long columns use page scrolling instead of a nested, height-capped task list.
 - Rebuild the same editor document for Core and Dashboard.
+- Show description/note character counts and preserve oversized drafts instead of submitting text that Core would truncate.
 
 ## 0.2.0 — 2026-11-11
 
