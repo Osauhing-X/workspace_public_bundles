@@ -6,6 +6,7 @@
   import Toolbar from './toolbar.svelte';
   import EmptyBoard from './empty-board.svelte';
   import Board from './board.svelte';
+  import {tagKey, taskMatches} from '../../ui/tags.js';
 
 
   let loading = $state(true);
@@ -14,6 +15,7 @@
   let message = $state(null);
   let settings = $state({ active_kanban_id: 'default', kanbans: [] });
   let exists = $state(false);
+  let labelsEnabled = $state(false);
   let userEmail = $state('');
   let draggedCard = $state(null);
   let editingBoards = $state([]);
@@ -46,10 +48,19 @@
   }
   async function selectKanban(id) {
     await change(() => settings.active_kanban_id = id, i18n.saved);
+    if (settings.active_kanban_id === id) { search = ''; labelFilter = ''; }
   }
   let fullscreen = $state(false);
   let mainElement = $state(null);
   let deletion = $state(null);
+  let search = $state('');
+  let labelFilter = $state('');
+  const availableLabels = $derived.by(() => {
+    const found = new Map();
+    for (const card of activeKanban?.cards ?? []) for (const tag of card.tags ?? []) if (!found.has(tagKey(tag))) found.set(tagKey(tag), tag);
+    return [...found].sort((a,b) => a[1].localeCompare(b[1]));
+  });
+  const matchingCards = $derived((activeKanban?.cards ?? []).filter(card => taskMatches(card,search,labelFilter)).length);
   function confirmDeletion(text) { return new Promise(resolve => { deletion = { text, resolve }; }); }
   function finishDeletion(answer) { deletion.resolve(answer); deletion = null; }
 
@@ -88,6 +99,7 @@
       return;
     }
     settings = json.settings ?? settings;
+    labelsEnabled = json.features?.kanban_task_labels === true;
     exists = !!json.exists;
     userEmail = json.user_email ?? '';
     } catch (reason) { error = reason.message ?? i18n.loadFailed; }
@@ -267,6 +279,7 @@
   function cardsFor(boardId, done = false) {
     return (activeKanban?.cards ?? [])
       .filter((card) => card.board_id === boardId && !!card.done === done)
+      .filter((card) => isCardEditing(card.id) || taskMatches(card, search, labelFilter))
       .sort((a, b) => Number(a.order ?? 0) - Number(b.order ?? 0));
   }
 
@@ -339,6 +352,13 @@
       onAddKanban={addKanban}
       onToggleFullscreen={toggleFullscreen} />
 
+    <section class="board-filters" aria-label={i18n.filterTasks}>
+      <label>{i18n.searchTasks}<input type="search" aria-label={i18n.searchTasks} bind:value={search} disabled={saving || editing} placeholder={i18n.searchPlaceholder}></label>
+      {#if labelsEnabled}<label>{i18n.filterLabel}<select aria-label={i18n.filterLabel} bind:value={labelFilter} disabled={saving || editing}><option value="">{i18n.allLabels}</option>{#each availableLabels as [key, label]}<option value={key}>{label}</option>{/each}</select></label>{/if}
+      <span role="status">{matchingCards} / {activeKanban?.cards?.length ?? 0} {i18n.cards}</span>
+      {#if search || labelFilter}<button class="button _secondary" disabled={saving || editing} onclick={() => { search=''; labelFilter=''; }}>{i18n.clearFilters}</button>{/if}
+    </section>
+
     {#if !activeKanban?.boards?.length}
       <EmptyBoard {i18n} onAddBoard={addBoard} />
     {:else}
@@ -347,6 +367,7 @@
         {activeKanban}
         {saving}
         {editing}
+        {labelsEnabled}
         bind:draggedCard
         onAddBoard={addBoard}
         onStartBoardEdit={startBoardEdit}
@@ -363,6 +384,7 @@
         onUnassign={unassign}
         onMoveCard={moveCard}
         onMoveBoard={moveBoard}
+        onFilterLabel={(label) => labelFilter = label}
         onDropCard={dropCard}
         {isBoardEditing}
         {isCardEditing}
@@ -377,6 +399,8 @@
   .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
   main.fullscreen { position: fixed; inset: 0; z-index: 50; overflow: auto; background: var(--x_light_1, #f6f7f9); }
   .setup { padding: 18px; }
+  .board-filters{display:flex;flex-wrap:wrap;gap:12px;align-items:end}.board-filters label{display:grid;gap:5px;min-width:160px}.board-filters label:first-child{flex:1;max-width:420px}.board-filters span{padding:10px 0;color:var(--override-muted,#667085);font-size:13px}.board-filters input,.board-filters select{width:100%;min-height:38px}.board-filters button{min-height:38px}
+  @media(max-width:500px){.board-filters label{min-width:0;flex:1}.board-filters label:first-child{flex-basis:100%}}
   :global(.kanban-module.fullscreen .hero) {
     display: none;
   }

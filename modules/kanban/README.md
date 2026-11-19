@@ -11,6 +11,20 @@ sets. Columns use the document's vertical scrolling instead of a viewport-height
 cap and nested task scrollbar; horizontal board navigation remains available.
 The same rebuilt document is used in Core and Dashboard.
 
+Task labels are stored on the existing card, with at most 20 labels of 32 Unicode
+characters each. Equivalent labels are normalized and duplicates removed. Labels
+can be edited or cleared, appear on active and completed cards, and can filter
+the board together with title/description search. Filters never remove records
+from the saved board. An open editor stays visible even when its draft no longer
+matches a filter, and failed saves retain its label draft.
+
+Label controls are enabled only when Core advertises
+`features.kanban_task_labels = true` through its owner/member data adapter. Older
+Core versions retain the ordinary board editor without submitting new labels to
+a storage adapter that cannot preserve them. Deploy the label-capable Core
+before relying on label editing. A single shared document serves both Core and
+Dashboard; group access and optimistic concurrency continue to be checked by Core.
+
 Local browser regression tests use a populated fixture and Core's real disk persistence, not a connected remote provider or deployed user data.
 
 ## Dashboard team access

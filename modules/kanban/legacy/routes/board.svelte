@@ -1,10 +1,12 @@
 <script>
   import CardEditor from './card-editor.svelte';
+  import TaskLabels from './task-labels.svelte';
   let {
     i18n,
     activeKanban,
     saving = false,
     editing = false,
+    labelsEnabled = false,
     draggedCard = $bindable(null),
     onAddBoard,
     onStartBoardEdit,
@@ -21,6 +23,7 @@
     onUnassign,
     onMoveCard,
     onMoveBoard,
+    onFilterLabel,
     onDropCard,
     isBoardEditing,
     isCardEditing,
@@ -98,7 +101,7 @@
             ondragend={() => draggedCard = null}
           >
             {#if isCardEditing(card.id)}
-              <CardEditor {card} {i18n} {saving} {onSaveCard} {onStopCardEdit} />
+              <CardEditor {card} {i18n} {saving} {labelsEnabled} {onSaveCard} {onStopCardEdit} />
             {:else}
               <details class="card-details">
                 <summary class="flex gap _2 _space _center _y">
@@ -138,6 +141,7 @@
                   </select>
                 </label>
               </details>
+              {#if labelsEnabled}<TaskLabels tags={card.tags ?? []} {i18n} disabled={saving || editing} onSelect={onFilterLabel}/>{/if}
             {/if}
           </div>
         {/each}
@@ -161,7 +165,7 @@
                 ondragend={() => draggedCard = null}
               >
                 {#if isCardEditing(card.id)}
-                  <CardEditor {card} {i18n} {saving} {onSaveCard} {onStopCardEdit} />
+                  <CardEditor {card} {i18n} {saving} {labelsEnabled} {onSaveCard} {onStopCardEdit} />
                 {:else}
                 <details class="card-details">
                   <summary class="flex gap _2 _space _center _y">
@@ -182,6 +186,7 @@
                   </div>
                   <label class="mobile-move grid gap">{i18n.moveTo}<select aria-label={i18n.moveTo} value={card.board_id} disabled={saving || editing} onchange={(event) => onMoveCard?.(card, event.currentTarget.value)}>{#each activeKanban.boards as target}<option value={target.id}>{target.name}</option>{/each}</select></label>
                 </details>
+                {#if labelsEnabled}<TaskLabels tags={card.tags ?? []} {i18n} disabled={saving || editing} onSelect={onFilterLabel}/>{/if}
                 {/if}
               </div>
             {/each}

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.2 — 2026-11-19
+
+- Add persisted task labels with Unicode normalization, bounded input and duplicate handling.
+- Search task titles, descriptions and labels, and combine search with a label filter.
+- Show labels on active/completed cards and filter by clicking a label.
+- Keep open drafts visible while filters change, preserve label drafts after failed saves and reset filters on board-set changes.
+- Enable label controls only when Core's shared storage adapter confirms support.
+
 ## 0.2.1 — 2026-11-19
 
 - Move columns left or right from their headers and persist the complete order.
