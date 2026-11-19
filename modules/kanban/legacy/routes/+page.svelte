@@ -7,6 +7,7 @@
   import EmptyBoard from './empty-board.svelte';
   import Board from './board.svelte';
   import {tagKey, taskMatches} from '../../ui/tags.js';
+  import {relocatedCards} from '../../ui/card-move.js';
 
 
   let loading = $state(true);
@@ -291,11 +292,10 @@
   }
 
   async function moveCard(card, boardId) {
-    if (card.board_id === boardId) return;
+    if (!activeKanban?.boards?.some(board => board.id === boardId) || card.board_id === boardId) return;
     await change(() => {
-    card.board_id = boardId;
-    card.order = (activeKanban?.cards ?? []).filter((item) => item.board_id === boardId).length;
-    card.updated_at = new Date().toISOString();
+      const cards = relocatedCards(activeKanban,card.id,boardId);
+      if (cards) activeKanban.cards = cards;
     }, i18n.cardMoved);
   }
 
@@ -312,10 +312,11 @@
   }
 
   async function dropCard(boardId) {
-    if (!draggedCard) return;
-    const card = activeKanban?.cards?.find((item) => item.id === draggedCard);
-    if (card) await moveCard(card, boardId);
+    const id = draggedCard;
     draggedCard = null;
+    if (!id) return;
+    const card = activeKanban?.cards?.find((item) => item.id === id);
+    if (card) await moveCard(card, boardId);
   }
 </script>
 
@@ -537,6 +538,8 @@
     padding: 12px;
     transition: opacity .16s ease, transform .16s ease;
   }
+  :global(.kanban-module .task.dragging) { opacity: .45; }
+  :global(.kanban-module .board.drop-target) { outline: 2px solid var(--x_brand,#da3); outline-offset: 2px; }
 
   :global(.kanban-module .task.done:not(:hover)) {
     opacity: .7;

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.2.3 — candidate
+
+- Populate native drag transfer data and show the destination column while dragging.
+- Avoid starting a card drag from form controls or links, and ignore external drops.
+- Use the same validated card move for dragging and the keyboard-accessible column selector.
+- Append after sparse imported order values, with bounded reindexing at the maximum integer.
+- Preserve labels, completion, notes and assignments while moving a task.
+
+Native pointer/browser acceptance is pending. This candidate is not published or installed.
+
 ## 0.2.2 — 2026-11-19
 
 - Add persisted task labels with Unicode normalization, bounded input and duplicate handling.

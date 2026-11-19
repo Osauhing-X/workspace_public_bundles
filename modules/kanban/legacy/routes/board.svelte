@@ -1,6 +1,7 @@
 <script>
   import CardEditor from './card-editor.svelte';
   import TaskLabels from './task-labels.svelte';
+  import {beginCardDrag} from '../../ui/card-move.js';
   let {
     i18n,
     activeKanban,
@@ -34,6 +35,18 @@
   function icon(id) {
     return `#${id}`;
   }
+  let dropTarget = $state(null);
+  function dragOver(event, boardId) {
+    event.preventDefault();
+    const allowed = Boolean(draggedCard) && !saving && !editing;
+    if (event.dataTransfer) event.dataTransfer.dropEffect = allowed ? 'move' : 'none';
+    dropTarget = allowed ? boardId : null;
+  }
+  function drop(event, boardId) {
+    event.preventDefault(); event.stopPropagation(); dropTarget = null;
+    if (draggedCard && !saving && !editing) onDropCard?.(boardId);
+  }
+  function endDrag() { draggedCard = null; dropTarget = null; }
 </script>
 
 <section class="board-shell gap _2 grid" aria-label={i18n.kanbanBoardLabel}>
@@ -41,8 +54,10 @@
     {@const progress = boardProgress(board.id)}
     <article
       class="board box _outer gap _2 grid"
-      ondragover={(event) => event.preventDefault()}
-      ondrop={() => onDropCard?.(board.id)}
+      class:drop-target={dropTarget === board.id}
+      ondragover={(event) => dragOver(event,board.id)}
+      ondragleave={(event) => { if (!(event.relatedTarget instanceof Node) || !event.currentTarget.contains(event.relatedTarget)) dropTarget = null; }}
+      ondrop={(event) => drop(event,board.id)}
     >
       <header class="grid gap _2">
         <nav class="column-order" aria-label={`${i18n.columnOrder}: ${board.name || i18n.untitledBoard}`}>
@@ -94,11 +109,12 @@
           <div
             class="task box _inner grid gap"
             class:important={card.important}
+            class:dragging={draggedCard === card.id}
             role="group"
             aria-label={`${i18n.cardLabel}: ${card.title}`}
             draggable={!saving && !editing}
-            ondragstart={() => draggedCard = card.id}
-            ondragend={() => draggedCard = null}
+            ondragstart={(event) => draggedCard = beginCardDrag(event,card.id,saving || editing)}
+            ondragend={endDrag}
           >
             {#if isCardEditing(card.id)}
               <CardEditor {card} {i18n} {saving} {labelsEnabled} {onSaveCard} {onStopCardEdit} />
@@ -158,11 +174,12 @@
             {#each cardsFor(board.id, true) as card}
               <div
                 class="task done box _inner grid gap"
+                class:dragging={draggedCard === card.id}
                 role="group"
                 aria-label={`${i18n.completedCardLabel}: ${card.title}`}
                 draggable={!saving && !editing}
-                ondragstart={() => draggedCard = card.id}
-                ondragend={() => draggedCard = null}
+                ondragstart={(event) => draggedCard = beginCardDrag(event,card.id,saving || editing)}
+                ondragend={endDrag}
               >
                 {#if isCardEditing(card.id)}
                   <CardEditor {card} {i18n} {saving} {labelsEnabled} {onSaveCard} {onStopCardEdit} />

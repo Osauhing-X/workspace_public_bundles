@@ -11,6 +11,13 @@ sets. Columns use the document's vertical scrolling instead of a viewport-height
 cap and nested task scrollbar; horizontal board navigation remains available.
 The same rebuilt document is used in Core and Dashboard.
 
+The next drag candidate fills the browser's native transfer data, identifies its
+target column and uses the same card move as the column selector. Only a drag
+started in the current editor selects a task; external text/file drops do not
+select or move records. Task fields and sparse order values are preserved.
+Its logic tests and package build pass, but real native pointer acceptance is
+still pending the computer-use browser-address limitation. It is not deployed.
+
 Task labels are stored on the existing card, with at most 20 labels of 32 Unicode
 characters each. Equivalent labels are normalized and duplicates removed. Labels
 can be edited or cleared, appear on active and completed cards, and can filter
