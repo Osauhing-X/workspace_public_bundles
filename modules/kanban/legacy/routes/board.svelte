@@ -20,6 +20,7 @@
     onAssign,
     onUnassign,
     onMoveCard,
+    onMoveBoard,
     onDropCard,
     isBoardEditing,
     isCardEditing,
@@ -33,7 +34,7 @@
 </script>
 
 <section class="board-shell gap _2 grid" aria-label={i18n.kanbanBoardLabel}>
-  {#each activeKanban.boards as board}
+  {#each activeKanban.boards as board, boardIndex (board.id)}
     {@const progress = boardProgress(board.id)}
     <article
       class="board box _outer gap _2 grid"
@@ -41,6 +42,10 @@
       ondrop={() => onDropCard?.(board.id)}
     >
       <header class="grid gap _2">
+        <nav class="column-order" aria-label={`${i18n.columnOrder}: ${board.name || i18n.untitledBoard}`}>
+          <button class="_secondary" disabled={saving || editing || boardIndex === 0} onclick={() => onMoveBoard?.(board.id, -1)} aria-label={`${i18n.moveColumnLeft}: ${board.name || i18n.untitledBoard}`} title={i18n.moveColumnLeft}>←</button>
+          <button class="_secondary" disabled={saving || editing || boardIndex === activeKanban.boards.length - 1} onclick={() => onMoveBoard?.(board.id, 1)} aria-label={`${i18n.moveColumnRight}: ${board.name || i18n.untitledBoard}`} title={i18n.moveColumnRight}>→</button>
+        </nav>
         <details>
           <summary class="flex gap _2 _space _center _y">
             <div class="grid gap">

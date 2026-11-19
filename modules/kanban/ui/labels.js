@@ -1,4 +1,8 @@
 export const labels = {
+  "columnOrder": "Column order",
+  "moveColumnLeft": "Move column left",
+  "moveColumnRight": "Move column right",
+  "columnMoved": "Column order saved.",
   "boardSet": "Board Set",
   "name": "Name",
   "boardSetDescription": "Board Set Description",

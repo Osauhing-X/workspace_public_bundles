@@ -286,6 +286,18 @@
     }, i18n.cardMoved);
   }
 
+  async function moveBoard(boardId, direction) {
+    if (!activeKanban || ![-1, 1].includes(direction)) return;
+    const index = activeKanban.boards.findIndex(board => board.id === boardId);
+    const target = index + direction;
+    if (index < 0 || target < 0 || target >= activeKanban.boards.length) return;
+    await change(() => {
+      const reordered = [...activeKanban.boards];
+      [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
+      activeKanban.boards = reordered.map((board, order) => ({ ...board, order }));
+    }, i18n.columnMoved);
+  }
+
   async function dropCard(boardId) {
     if (!draggedCard) return;
     const card = activeKanban?.cards?.find((item) => item.id === draggedCard);
@@ -350,6 +362,7 @@
         onAssign={assign}
         onUnassign={unassign}
         onMoveCard={moveCard}
+        onMoveBoard={moveBoard}
         onDropCard={dropCard}
         {isBoardEditing}
         {isCardEditing}
@@ -402,6 +415,7 @@
     overflow-x: auto;
     padding-bottom: 10px;
     scroll-snap-type: x proximity;
+    align-items: start;
   }
 
   :global(.kanban-module.fullscreen .board-shell) {
@@ -416,11 +430,14 @@
 
   :global(.kanban-module .board) {
     min-height: 380px;
-    max-height: calc(100dvh - 230px);
-    grid-template-rows: auto auto minmax(0, 1fr) auto auto;
+    grid-template-rows: auto;
+    align-content: start;
     padding: 0;
-    overflow: hidden;
+    overflow: visible;
   }
+
+  :global(.kanban-module .column-order) { display: flex; gap: 6px; justify-content: flex-end; }
+  :global(.kanban-module .column-order button) { min-width: 32px; min-height: 32px; padding: 4px 8px; }
 
   :global(.kanban-module .board > header) {
     padding: 14px;
@@ -472,7 +489,7 @@
   :global(.kanban-module .cards) {
     min-height: 0;
     align-content: start;
-    overflow-y: auto;
+    overflow: visible;
     padding: 0 12px;
   }
 

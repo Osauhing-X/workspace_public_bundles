@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.1 — 2026-11-19
+
+- Move columns left or right from their headers and persist the complete order.
+- Preserve every task and board set; restore the previous order if saving fails.
+- Disable ordering at column boundaries and while another draft or save is active.
+- Let long columns use page scrolling instead of a nested, height-capped task list.
+- Rebuild the same editor document for Core and Dashboard.
+
 ## 0.2.0 — 2026-11-11
 
 - Add a group-scoped Dashboard editor backed by the existing instance Kanban data.
