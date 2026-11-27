@@ -18,5 +18,9 @@ test('search and label filters are combined without changing cards or hiding mat
   assert.equal(taskMatches(cards[1],'approval','ui'),true);
   assert.equal(taskMatches(cards[1],'missing','ui'),false);
   assert.equal(taskMatches(cards[1],'review'),true);
+  assert.equal(taskMatches(cards[1],'new'),true);
+  assert.equal(taskMatches(cards[1],'#new'),true);
+  assert.equal(taskMatches(cards[1],'#new','ui'),true);
+  assert.equal(taskMatches(cards[0],'#new'),false);
   assert.deepEqual(cards,original);
 });

@@ -15,5 +15,5 @@ export function parseTagInput(value) {
 export function taskMatches(card, query = '', label = '') {
   if (label && !(card.tags ?? []).some(tag => tagKey(tag) === label)) return false;
   const needle = query.trim().toLowerCase();
-  return !needle || [card.title, card.description, ...(card.tags ?? [])].some(value => String(value ?? '').toLowerCase().includes(needle));
+  return !needle || [card.id,card.id==null?'':'#'+card.id,card.title, card.description, ...(card.tags ?? [])].some(value => String(value ?? '').toLowerCase().includes(needle));
 }

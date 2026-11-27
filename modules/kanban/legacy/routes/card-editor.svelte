@@ -7,6 +7,7 @@
   function save() { if (tooLong || labelsEnabled && parsedTags.error) return; if(labelsEnabled) card.tags = parsedTags.tags; onSaveCard?.(card.id); }
 </script>
 <fieldset disabled={saving} class="card-editor grid gap">
+  <small class="card-identifier"><code>#{card.id}</code></small>
   <label class="grid gap">{i18n.cardTitle}<input maxlength="160" bind:value={card.title}></label>
   <label class="grid gap">{i18n.descriptionLabel}<textarea rows="3" aria-label={i18n.descriptionLabel} bind:value={card.description} aria-invalid={(card.description?.length ?? 0) > 2000}></textarea><small class="field-count">{card.description?.length ?? 0} / 2000</small></label>
   {#if labelsEnabled}<label class="grid gap">{i18n.labels}<input aria-label={i18n.labels} bind:value={tagDraft} aria-invalid={Boolean(parsedTags.error)} placeholder={i18n.labelsPlaceholder}><small>{i18n.labelsHelp}</small></label>

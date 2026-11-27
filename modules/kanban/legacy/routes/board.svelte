@@ -122,7 +122,7 @@
               <details class="card-details">
                 <summary class="flex gap _2 _space _center _y">
                   <input type="checkbox" checked={card.done} disabled={saving || editing} aria-label={i18n.markComplete} onclick={(event) => event.stopPropagation()} onchange={() => onToggleDone?.(card)}>
-                  <b>{card.title || i18n.untitledCard}</b>
+                  <span class="card-identity grid gap"><b>{card.title || i18n.untitledCard}</b><small><code>#{card.id}</code></small></span>
                   {#if card.important}<span class="badge flex">{i18n.important}</span>{/if}
                 </summary>
                 {#if card.description}<p>{card.description}</p>{/if}
@@ -187,7 +187,7 @@
                 <details class="card-details">
                   <summary class="flex gap _2 _space _center _y">
                     <input type="checkbox" checked={card.done} disabled={saving || editing} aria-label={i18n.reopenCard} onclick={(event) => event.stopPropagation()} onchange={() => onToggleDone?.(card)}>
-                    <b>{card.title || i18n.untitledCard}</b>
+                    <span class="card-identity grid gap"><b>{card.title || i18n.untitledCard}</b><small><code>#{card.id}</code></small></span>
                   </summary>
                   {#if card.description}<p>{card.description}</p>{/if}
                   <div class="card-actions gap _2 flex">
@@ -217,3 +217,4 @@
     <button class="button _primary" onclick={onAddBoard}>{i18n.addBoard}</button>
   </article>
 </section>
+<style>.card-identity{min-width:0}.card-identity code{font-size:10px;line-height:1.4;overflow-wrap:anywhere;white-space:normal;color:#68717c}</style>
